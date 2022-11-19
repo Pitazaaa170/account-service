@@ -1,1 +1,23 @@
+spring:
+  kafka:
+    bootstrap-servers: 'localhost:9092'
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/user_account'
+    username: 'postgres'
+    password: 'mate92'
+  liquibase:
+    change-log: 'classpath:db/changelog/db.changelog-master.xml'
+    enabled: true
+
+app:
+  name:
+    'account-service'
+  kafka:
+    producer:
+      acks: 1
+      topic: 'registration'
+    consumer:
+      topic: 'registration'
+
+
 
