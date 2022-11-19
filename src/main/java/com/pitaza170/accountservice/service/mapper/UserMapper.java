@@ -8,10 +8,8 @@ import com.pitaza170.accountservice.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -24,14 +22,14 @@ public class UserMapper {
         LocalDateTime now = LocalDateTime.now();
         return new UserEntity(
                 userRepository.findNextId(),
-                user.name(),
-                user.surname(),
-                String.valueOf(user.id()),
-                user.login(),
-                user.password(),
-                user.role().name(),
-                user.registered(),
-                user.status(),
+                user.getName(),
+                user.getSurname(),
+                String.valueOf(user.getId()),
+                user.getLogin(),
+                user.getPassword(),
+                user.getRole().name(),
+                user.isRegistered(),
+                user.isStatus(),
                 Timestamp.valueOf(now)
 
         );
@@ -39,9 +37,9 @@ public class UserMapper {
 
     public AuthMessage mapMessage(User user) {
         return new AuthMessage(
-                user.id(),
-                user.name(),
-                user.surname(),
+                user.getId(),
+                user.getName(),
+                user.getSurname(),
                 Role.USER,
                 false
         );
