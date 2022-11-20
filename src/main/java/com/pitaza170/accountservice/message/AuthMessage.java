@@ -8,7 +8,7 @@ public record AuthMessage(
         String name,
         String surname,
         Role role,
-        boolean status
+        boolean isRegistered
 
 ) {
 }

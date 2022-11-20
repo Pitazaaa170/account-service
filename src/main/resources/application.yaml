@@ -1,6 +1,4 @@
 spring:
-  kafka:
-    bootstrap-servers: 'localhost:9092'
   datasource:
     url: 'jdbc:postgresql://localhost:5432/user_account'
     username: 'postgres'
@@ -8,16 +6,21 @@ spring:
   liquibase:
     change-log: 'classpath:db/changelog/db.changelog-master.xml'
     enabled: true
+  kafka:
+    bootstrap-servers: 'localhost:9092'
+    kafka:
+      producer:
+        acks: 1
+        topic: 'registration'
+      consumer:
+        topic: 'registration'
+        group-id: ${app.name}
+        auto-offset-reset: earliest
+
 
 app:
-  name:
-    'account-service'
-  kafka:
-    producer:
-      acks: 1
-      topic: 'registration'
-    consumer:
-      topic: 'registration'
+  name: 'accountservice'
+
 
 
 

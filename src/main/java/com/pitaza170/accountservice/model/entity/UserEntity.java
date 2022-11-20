@@ -1,24 +1,24 @@
 package com.pitaza170.accountservice.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
+
 import java.sql.Timestamp;
 
+@Data
 @AllArgsConstructor
-@Getter
+@NoArgsConstructor
 public class UserEntity {
 
-    private final int id;
-    private final String name;
-    private final String surname;
-    private final String userId;
-    private final String login;
-    private final String password;
-    private final String role;
-    private final boolean registered;
-    private final boolean status;
-    private final Timestamp created;
-
+    private int id;
+    private String name;
+    private String surname;
+    private String userId;
+    private String login;
+    private String password;
+    private String role;
+    private boolean registered;
+    private boolean status;
+    private Timestamp created;
 
 
 }

@@ -1,10 +1,11 @@
 package com.pitaza170.accountservice.persistence;
 
 
-import com.pitaza170.accountservice.domain.User;
 import com.pitaza170.accountservice.model.entity.UserEntity;
+import com.pitaza170.accountservice.model.response.SignInResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,7 +13,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -27,7 +30,7 @@ public class UserRepository {
             "SELECT nextval('users_id_seq');";
 
     private static final String CHECK_USER  =
-            "SELECT user_id FROM users WHERE login AND password IN (:login, :password);";
+            "SELECT user_id, registered, status FROM users WHERE login = ? AND password = ?";
 
     private static final String UPDATE_STATUS =
             "UPDATE users SET status = ? WHERE user_id = ?";
@@ -59,35 +62,47 @@ public class UserRepository {
                 INSERT_INTO, parameterSource, MAPPER);
     }
 
-    public User getUserById(String userId) {
-        return jdbcTemplate.queryForObject(
-                GET_USER, new Object[] {userId},
-                (rs, rowNum) -> {
-                    User user = new User();
-                    user.setId(Integer.parseInt(rs.getString("user_id")));
-                    user.setName(rs.getString("name"));
-                    user.setSurname(rs.getString("surname"));
-                    user.setLogin(rs.getString("login"));
-                    user.setStatus(Boolean.parseBoolean(rs.getString("created")));
-                    user.setStatus(Boolean.parseBoolean(rs.getString("status")));
-                    return user;
-                });
+    public Optional<UserEntity> getUserById(String userId) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
+                    GET_USER, new Object[] {userId},
+                    (rs, rowNum) -> {
+                        UserEntity user = new UserEntity();
+                        user.setId(Integer.parseInt(rs.getString("user_id")));
+                        user.setName(rs.getString("name"));
+                        user.setSurname(rs.getString("surname"));
+                        user.setLogin(rs.getString("login"));
+                        user.setCreated(Timestamp.valueOf(rs.getString("created")));
+                        user.setStatus(Boolean.parseBoolean(rs.getString("status")));
+                        user.setRole(rs.getString("role"));
+                        return user;
+                    }));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+
     }
     @Transactional
     public void updateStatus(String userId, Boolean status) {
          jdbcTemplate.update(UPDATE_STATUS, status, userId);
     }
 
- /*   public Boolean checkUser(String login, String password) {
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("login", login)
-                .addValue("password", password);
+    public Optional<UserEntity> isAuthenticated(String login, String password) {
 
-        return namedParameterJdbcTemplate.queryForObject(
-          CHECK_USER, parameterSource, );
-        );
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
+                    CHECK_USER, new Object[] {login, password},
+                    (rs, rowNum) -> {
+                        UserEntity user = new UserEntity();
+                        user.setId(Integer.parseInt(rs.getString("user_id")));
+                        user.setRegistered(rs.getBoolean("registered"));
+                        user.setStatus(rs.getBoolean("status"));
+                        return user;
+                    }));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
-*/
     private static final RowMapper<UserEntity> MAPPER = (rs, rn) -> {
         return new UserEntity(
                 rs.getInt("id"),
@@ -102,9 +117,6 @@ public class UserRepository {
                 rs.getTimestamp("created")
         );
     };
-
-
-
 
 
 }
