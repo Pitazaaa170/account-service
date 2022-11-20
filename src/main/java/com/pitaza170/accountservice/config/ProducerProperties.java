@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class KafkaProperties {
+public class ProducerProperties {
 
     private String topic;
 
