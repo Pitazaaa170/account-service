@@ -14,7 +14,7 @@ public class UserController {
 
     private final UserServiceDetail userServiceDetail;
 
-    @PutMapping("/changeStatus/{userId}")
+    @PutMapping("/user/block/{userId}")
     public ResponseEntity<?> changeStatus(@PathVariable String userId,
                                                     @RequestParam Boolean status) {
 

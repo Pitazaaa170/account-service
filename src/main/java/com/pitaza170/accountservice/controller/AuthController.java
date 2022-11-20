@@ -24,7 +24,7 @@ public class AuthController {
     private final UserRegistrationService userRegistrationService;
 
 
-    @PostMapping("/signup")
+    @PostMapping("/user/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
 
         userRegistrationService.register(
@@ -44,7 +44,7 @@ public class AuthController {
         return ResponseEntity.ok(SUCCESS);
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/user/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody SignInRequest signInRequest) {
 
         User user = userRegistrationService.isAuthenticated(signInRequest.getLogin(), signInRequest.getPassword());
