@@ -2,7 +2,7 @@ package com.pitaza170.accountservice.service.mapper;
 
 import com.pitaza170.accountservice.domain.Role;
 import com.pitaza170.accountservice.domain.User;
-import com.pitaza170.accountservice.message.AuthMessage;
+import com.pitaza170.accountservice.kafka.message.AuthMessage;
 import com.pitaza170.accountservice.model.entity.UserEntity;
 import com.pitaza170.accountservice.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;

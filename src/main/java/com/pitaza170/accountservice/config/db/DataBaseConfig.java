@@ -1,4 +1,4 @@
-package com.pitaza170.accountservice.config;
+package com.pitaza170.accountservice.config.db;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

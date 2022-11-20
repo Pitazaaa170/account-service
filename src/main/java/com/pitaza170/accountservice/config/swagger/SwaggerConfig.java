@@ -1,4 +1,4 @@
-package com.pitaza170.accountservice.config;
+package com.pitaza170.accountservice.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

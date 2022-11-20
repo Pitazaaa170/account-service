@@ -32,8 +32,10 @@ public class UserRepository {
     private static final String CHECK_USER  =
             "SELECT user_id, registered, status FROM users WHERE login = ? AND password = ?";
 
-    private static final String UPDATE_STATUS =
+    private static final String UPDATE_STATUS_BLOCK =
             "UPDATE users SET status = ? WHERE user_id = ?";
+    private static final String UPDATE_STATUS_REGISTRATION =
+            "UPDATE users SET registered = ? WHERE user_id = ?";
     private static final String GET_USER =
             "SELECT * FROM users WHERE user_id = ?";
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -84,7 +86,11 @@ public class UserRepository {
     }
     @Transactional
     public void updateStatus(String userId, Boolean status) {
-         jdbcTemplate.update(UPDATE_STATUS, status, userId);
+         jdbcTemplate.update(UPDATE_STATUS_BLOCK, status, userId);
+    }
+
+    public void updateUserRegistrationStatus(long userId) {
+        jdbcTemplate.update(UPDATE_STATUS_REGISTRATION, userId);
     }
 
     public Optional<UserEntity> isAuthenticated(String login, String password) {
@@ -103,6 +109,8 @@ public class UserRepository {
             return Optional.empty();
         }
     }
+
+
     private static final RowMapper<UserEntity> MAPPER = (rs, rn) -> {
         return new UserEntity(
                 rs.getInt("id"),
@@ -117,6 +125,7 @@ public class UserRepository {
                 rs.getTimestamp("created")
         );
     };
+
 
 
 }

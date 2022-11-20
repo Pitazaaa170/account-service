@@ -1,4 +1,4 @@
-package com.pitaza170.accountservice.message;
+package com.pitaza170.accountservice.kafka.message;
 
 import com.pitaza170.accountservice.domain.Role;
 
